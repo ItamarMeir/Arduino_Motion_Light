@@ -1,0 +1,32 @@
+#include <avr/sleep.h>
+
+// Define constants
+const int LED_pin = 2;         // The pin connected to the LED
+const int PIR_INPUT = 3;       // The pin connected to the PIR sensor
+const int delay_ms = 2000;     // Delay time for turning off the LED in milliseconds
+
+void setup()
+{
+  pinMode(LED_pin, OUTPUT);     // Set LED_pin as an output
+  pinMode(PIR_INPUT, INPUT_PULLUP); // Set PIR_INPUT as an input with pull-up resistor
+
+  // Attach an interrupt to PIR_INPUT that triggers Turn_LED_On when it detects a rising edge
+  attachInterrupt(digitalPinToInterrupt(PIR_INPUT), Turn_LED_On, RISING);
+}
+
+void loop()
+{
+  digitalWrite(LED_pin, LOW);   // Turn off the LED
+
+  // Set sleep mode to save power
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  sleep_enable();
+  sleep_mode(); // Enter sleep mode
+}
+
+// Interrupt service routine (ISR) that turns on the LED when motion is detected
+void Turn_LED_On()
+{
+  digitalWrite(LED_pin, HIGH);  // Turn on the LED
+  delay(delay_ms);              // Wait for a specified delay
+}
