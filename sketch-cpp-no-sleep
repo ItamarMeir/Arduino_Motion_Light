@@ -1,7 +1,7 @@
 // Define constants
-const int LED_pin = 2;         // The pin connected to the LED
+const int LED_pin = 13;         // The pin connected to the LED
 const int PIR_INPUT = 3;       // The pin connected to the PIR sensor
-const int delay_ms = 2000;     // Delay time for turning off the LED in milliseconds
+const int delay_ms = 5000;     // Delay time for turning off the LED in milliseconds
 
 void setup()
 {
@@ -11,10 +11,12 @@ void setup()
 
 void loop()
 {
-  digitalWrite(LED_pin, LOW);   // Turn off the LED
- 
-  if (digitalRead(PIR_INPUT)) {
+  int ReadVal = digitalRead(PIR_INPUT);
+  if (ReadVal) {
     digitalWrite(LED_pin, HIGH);  // Turn on the LED
     delay(delay_ms);              // Wait for a specified delay
+  }
+  else {
+    digitalWrite(LED_pin, LOW);   // Turn off the LED
   }
 }
