@@ -1,39 +1,59 @@
 # Arduino Motion Detection with PIR Sensor
 
-Welcome to the Arduino Motion Detection with PIR Sensor project repository! This repository contains multiple branches, each representing a different version of the Arduino code for motion detection using a Passive Infrared (PIR) sensor. Below, you'll find an explanation of each branch and its purpose.
+Welcome to the Arduino Motion Detection with PIR Sensor project repository! This repository contains multiple branches, each representing a different version of the Arduino code for motion detection using a Passive Infrared (PIR) sensor. Below, you'll find a comparison of the different versions available in this repository.
 
-## Branches
+## Hardware Setup
 
-### 1. `main` Branch
+### Components Required
 
-- **Description**: The `main` branch serves as the default branch for this repository and contains important project documentation and information.
-  
-- **Contents**:
-  - README: Project introduction, setup instructions, and usage guidelines.
-  - CONTRIBUTING.md: Guidelines for contributing to this project.
-  - LICENSE: Information about the project's license.
+- **Arduino Board:** Any Arduino board compatible with the Arduino IDE.
+- **Passive Infrared (PIR) Sensor:** Detects motion and is connected to the Arduino board.
+- **LED:** Used to indicate motion detection.
 
-### 2. `cpp-no-sleep` Branch
+### Pin Connections
 
-- **Description**: The `cpp-no-sleep` branch contains the Arduino code written entirely in C++ without using sleep mode.
-  
-- **Purpose**: This branch showcases motion detection code without utilizing sleep mode for power-saving purposes.
+- **LED Pin (LED_pin):** Connect the positive leg of the LED to digital pin 13 and the negative leg through a current-limiting resistor to the ground (GND).
+- **PIR Sensor Pin (PIR_INPUT):** Connect the signal pin of the PIR sensor to digital pin 2.
 
-### 3. `cpp-with-sleep` Branch
+## Versions Comparison
 
-- **Description**: The `cpp-with-sleep` branch contains the Arduino code written entirely in C++ and includes sleep mode functionality.
-  
-- **Purpose**: This branch demonstrates motion detection code that utilizes sleep mode to conserve power when not actively detecting motion.
+### 1. `cpp-no-sleep` Branch
 
-### 4. `cpp-register-writing-with-sleep` Branch
+- **Functionality**:
+  - Arduino code written entirely in C++ without utilizing sleep mode functionality.
+  - Controls an LED based on motion detection from a PIR sensor.
+  - Turns on the LED for a specific duration upon detecting motion.
 
-- **Description**: The `cpp-register-writing-with-sleep` branch includes code that uses C++ along with direct MCU register writing, and it also incorporates sleep mode functionality.
-  
-- **Purpose**: This branch explores motion detection code that employs direct register manipulation alongside sleep mode for advanced control and power efficiency.
+- **Memory Usage**:
+  - Program Storage Space: Uses 1050 bytes (3%) of program storage space.
+  - Dynamic Memory (RAM): Global variables use 9 bytes (0%) of dynamic memory.
 
-## Getting Started
+### 2. `cpp-with-sleep` Branch
 
-To get started with a specific branch, follow these steps:
+- **Functionality**:
+  - Arduino code written in C++ and includes sleep mode functionality.
+  - Controls an LED based on motion detection from a PIR sensor.
+  - Utilizes sleep mode to conserve power when not actively detecting motion.
 
-1. Clone or fork this repository to your local development environment.
-2. Switch to the desired branch using Git. For example, to switch to the `cpp-no-sleep` branch, use the command:
+- **Memory Usage**:
+  - Program Storage Space: Uses 1204 bytes (3%) of program storage space.
+  - Dynamic Memory (RAM): Global variables use 14 bytes (0%) of dynamic memory.
+
+### 3. `cpp-register-writing-with-sleep` Branch
+
+- **Functionality**:
+  - Arduino code in C++ with direct MCU register writing and incorporates sleep mode functionality.
+  - Controls an LED based on motion detection from a PIR sensor.
+  - Employs direct register manipulation alongside sleep mode for advanced control and power efficiency.
+
+- **Memory Usage**:
+  - Program Storage Space: Utilizes 670 bytes (2%) of program storage space.
+  - Dynamic Memory (RAM): Global variables use 10 bytes (0%) of dynamic memory.
+
+<details>
+  <summary><b>Authors</b></summary>
+
+  This project uses the same hardware configuration across all versions and was authored by Itamar Meir. Contributions from the open-source community are welcome and encouraged.
+</details>
+
+
