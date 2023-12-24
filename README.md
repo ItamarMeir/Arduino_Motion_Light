@@ -33,4 +33,4 @@ This Arduino sketch controls an LED based on motion detection from a Passive Inf
 - Ensure the correct pin connections and component configurations for proper functionality.
 
 ## Author
-This code was authored by [Your Name or Username] and can be modified or used according to your project requirements.
+This code was authored by [Itamar Meir] and can be modified or used according to your project requirements.
