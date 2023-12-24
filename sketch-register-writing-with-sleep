@@ -1,40 +1,43 @@
-// Define constants
-const int LED_pin = 13;         // The pin connected to the LED PORT B.
-const int PIR_INPUT = 2;        // The pin connected to the PIR sensor PORT D pin 2. Note: Only pins 2 and 3 can be used for external interrupts.
-const int delay_ms = 30000;     // Delay time for turning off the LED in milliseconds
+// Define pin assignments and constants
+const int LED_pin = 13;         // Pin connected to the LED (PORT B, pin 13).
+const int PIR_INPUT = 2;        // Pin connected to the PIR sensor (PORT D, pin 2).
+const int delay_ms = 30000;     // Time in milliseconds to keep the LED on.
 
-volatile bool motionDetected = false; // Flag to indicate motion detection
+volatile bool motionDetected = false; // Flag to indicate motion detection.
 
 void setup() {
+  // Set LED_pin as an output
+  DDRB |= 0b1 << (LED_pin % 8);  // Equivalent to pinMode(LED_pin, OUTPUT);
   
+  // Set PIR_INPUT as an input with pull-up resistor
+  PORTD |= 0b1 << PIR_INPUT; // Equivalent to pinMode(PIR_INPUT, INPUT_PULLUP);
   
-   DDRB |= 0b1 << (LED_pin % 8);  // Set LED_pin as an output: pinMode(LED_pin, OUTPUT);          
-  PORTD |= 0b1 << PIR_INPUT; // Set PIR_INPUT as an input with pull-up resistor: pinMode(PIR_INPUT, INPUT_PULLUP); 
-  SMCR = 0b0100; // set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  // Set sleep mode to power down for power saving
+  SMCR = 0b0100; // Equivalent to set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 
-  // Attach an interrupt to PIR_INPUT that triggers ISR INT vector when it detects a rising edge
- // attachInterrupt(digitalPinToInterrupt(PIR_INPUT), MotionDetected, RISING);
- EICRA |= (0b11) << ((PIR_INPUT%2)*2); // Making INT0 or INT 1 rising edge (PIN 2 --> INT0, PIN 3 --> INT1) 
- EIMSK |= 0b1 << (PIR_INPUT%2); // Making external interrupt enabled
+  // Configure external interrupt on PIR_INPUT for motion detection
+  EICRA |= (0b11) << ((PIR_INPUT % 2) * 2); // Configure rising edge trigger (INT0 or INT1)
+  EIMSK |= 0b1 << (PIR_INPUT % 2); // Enable external interrupt (INT0 or INT1)
 }
 
 void loop() {
-  SMCR &= ~(0b1); // Clearing entering sleep mode bit (AND(SMCR,NOT(1)))
+  // Disable sleep mode for normal operation
+  SMCR &= ~(0b1); // Equivalent to clearing entering sleep mode bit (AND(SMCR, NOT(1)))
+
+  // Check if motion is detected
   if (motionDetected) {
-    PORTB |= 0b1 << (LED_pin % 8); // Turn on the LED: digitalWrite(LED_pin, HIGH);
-    delay(delay_ms);               // Delay to keep the LED on for a specific time
-    PORTB &= ~(0b1 << (LED_pin % 8)); // Turn off the LED: digitalWrite(LED_pin, LOW);
-    motionDetected = false;        // Reset the motion detection flag
+    // Turn on the LED
+    PORTB |= 0b1 << (LED_pin % 8); // Equivalent to digitalWrite(LED_pin, HIGH);
+    delay(delay_ms);               // Keep the LED on for a specific time
+    PORTB &= ~(0b1 << (LED_pin % 8)); // Turn off the LED
+    motionDetected = false;        // Reset motion detection flag
   }
   
   // Enter sleep mode to save power when there's no motion detected
-  SMCR |= 0b1; // Enter sleep mode: sleep_enable(); sleep_mode(); 
-  
- 
+  SMCR |= 0b1; // Equivalent to entering sleep mode (sleep_enable(); sleep_mode();)
 }
 
-
-// Interrupt service routine for INT0 (If PIR_INPUT == 3 --> use INT1_vect instead)
+// Interrupt service routine for INT0 (if PIR_INPUT == 3 --> use INT1_vect instead)
 ISR(INT0_vect) {
-  motionDetected = true;
+  motionDetected = true; // Set motion detection flag when interrupt occurs
 }
