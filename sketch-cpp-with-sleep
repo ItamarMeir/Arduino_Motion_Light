@@ -2,10 +2,10 @@
 
 #include <avr/sleep.h>
 
-// Define constants
-const int LED_pin = 13;         // The pin connected to the LED
-const int PIR_INPUT = 3;        // The pin connected to the PIR sensor
-const int delay_ms = 10000;     // Delay time for turning off the LED in milliseconds
+// Define pin assignments and constants
+const int LED_pin = 13;         // Pin connected to the LED (digital pin 13)
+const int PIR_INPUT = 2;        // Pin connected to the PIR sensor (digital pin 2)
+const int delay_ms = 10000;     // Time in milliseconds to keep the LED on after motion detection
 
 volatile bool motionDetected = false; // Flag to indicate motion detection
 
@@ -13,25 +13,25 @@ void setup() {
   pinMode(LED_pin, OUTPUT);           // Set LED_pin as an output
   pinMode(PIR_INPUT, INPUT_PULLUP);   // Set PIR_INPUT as an input with pull-up resistor
   
-  // Attach an interrupt to PIR_INPUT that triggers MotionDetected when it detects a rising edge
+  // Attach an interrupt to PIR_INPUT that triggers the MotionDetected function when it detects a rising edge
   attachInterrupt(digitalPinToInterrupt(PIR_INPUT), MotionDetected, RISING);
 }
 
 void loop() {
   if (motionDetected) {
     digitalWrite(LED_pin, HIGH);   // Turn on the LED
-    delay(delay_ms);               // Delay to keep the LED on for a specific time
+    delay(delay_ms);               // Keep the LED on for a specific time
     digitalWrite(LED_pin, LOW);    // Turn off the LED
     motionDetected = false;        // Reset the motion detection flag
   }
   
   // Enter sleep mode to save power when there's no motion detected
-  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-  sleep_enable();
-  sleep_mode(); // Enter sleep mode
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN); // Set the sleep mode to power down
+  sleep_enable(); // Enable sleep mode
+  sleep_mode();   // Enter sleep mode
 }
 
 // Interrupt service routine (ISR) that sets the motion detection flag
 void MotionDetected() {
-  motionDetected = true;
+  motionDetected = true; // Set the motion detection flag when interrupt occurs
 }
